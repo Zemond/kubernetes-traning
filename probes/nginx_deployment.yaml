@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-probes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-probes
+  template:
+    metadata:
+      labels:
+        app: nginx-probes
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.12
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          failureThreshold: 5
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 5
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 1
+
